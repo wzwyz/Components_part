@@ -6,24 +6,12 @@
 #include<iostream>
 #include<cstdio>
 #include<time.h>
+#include "Dbh.h"
 //#include <Eigen/Dense>
 //#include <Eigen/Core>
 #define MAXN 260
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
 using namespace std;
-class Dbh{
-	public:
-		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-		int cur;	
-		bool sig=true;
-		int adjustment_button(int cx,int fy,int difnumb,WORD wttu=0xB0,WORD wttd=0x0B,int r_ox=173,int g_ox=17,int b_ox=255,char lsig='<',char rsig='>',int width=4);
-		int slider_bar(int cx,int fy,int difnumb,WORD wttu=0xB0,WORD wttd=0x0B,int r_ox=145,int g_ox=215,int b_ox=37);
-		int input_box(int cx,int fy,int areat,int r_ox=173,int g_ox=202,int b_ox=255);
-		int color_box(int cx,int fy,int r,int g,int b);
-		int text_box(int cx,int fy,int txtin,int length);
-		int contact_button(int cx,int sx,int fy);
-		void clearp(HANDLE hConsole=GetStdHandle(STD_INPUT_HANDLE));
-}; 
 void Dbh::clearp(HANDLE hConsole)
 {
    CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -241,26 +229,5 @@ int Dbh::slider_bar(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_ox,int g
 			}
 		}
 	} 
-	return 0;
-}
-int main(){
-	Dbh dbh,dbh1;
-	dbh1.text_box(27,2,7,4);
-	#pragma omp parallel for
-	for(int i=1;i<=2;i++){
-		if(i==1)dbh.slider_bar(3,2,4);
-		else{
-			int old;
-			while(1){
-				if(dbh.cur!=old){
-					Sleep(2);
-					dbh1.text_box(27,2,dbh.cur,4);
-					old=dbh.cur;
-				}
-			}
-		}
-	}
-	
-	
 	return 0;
 }
