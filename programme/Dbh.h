@@ -1,4 +1,6 @@
+#include<bits/stdc++.h>
 #pragma once
+using namespace std;
 class Dbh{
 	public:
 		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -9,7 +11,7 @@ class Dbh{
 		int input_box(int cx,int fy,int areat,int r_ox=173,int g_ox=202,int b_ox=255);
 		int color_box(int cx,int fy,int r,int g,int b);
 		int text_box(int cx,int fy,int txtin,int length);
-		int contact_button(int cx,int sx,int fy);
+		int contact_button(int cx,int sx,int fy,WORD wttu=0xB0,WORD wttd=0x0B);
+		int write_box(int cx,int fy,string txton,int length,WORD wttu=0xB0,WORD wttd=0x0B);
 		void clearp(HANDLE hConsole=GetStdHandle(STD_INPUT_HANDLE));
 }; 
- 

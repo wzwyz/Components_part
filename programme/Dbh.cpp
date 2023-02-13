@@ -12,8 +12,7 @@
 #define MAXN 260
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
 using namespace std;
-void Dbh::clearp(HANDLE hConsole)
-{
+void Dbh::clearp(HANDLE hConsole){
    CONSOLE_SCREEN_BUFFER_INFO csbi;
    SMALL_RECT scrollRect;
    COORD scrollTarget;
@@ -32,7 +31,7 @@ void Dbh::clearp(HANDLE hConsole)
    csbi.dwCursorPosition.Y=0;
    SetConsoleCursorPosition(hConsole,csbi.dwCursorPosition);
 }
-int Dbh::contact_button(int cx,int sx,int fy){
+int Dbh::contact_button(int cx,int sx,int fy,WORD wttu,WORD wttd){
 	if (hOut == INVALID_HANDLE_VALUE)return GetLastError();
     DWORD dwMode = 0;
     if (!GetConsoleMode(hOut, &dwMode))return GetLastError();
@@ -48,6 +47,7 @@ int Dbh::contact_button(int cx,int sx,int fy){
     INPUT_RECORD record;
     DWORD n;
 	for( COORD pos={}; ReadConsoleInput(hInput,&record,1,&n) && n==1; ){
+		//Sleep(1);
 		if(sig==false){
 			short x =cx,y=fy;
 			printf("\x1b[%hd;%hdH", y+1, x+1);
@@ -60,10 +60,10 @@ int Dbh::contact_button(int cx,int sx,int fy){
         	HANDLE outputHandle=GetStdHandle(STD_OUTPUT_HANDLE);
 			DWORD getWrittenCount = 0;
 			COORD writtenPos={cx,fy};
-			FillConsoleOutputAttribute(outputHandle, 0xB0, sx-cx, writtenPos, &getWrittenCount);
-        	if(KEY_DOWN(VK_LBUTTON)) { 
+			FillConsoleOutputAttribute(outputHandle, wttu, sx-cx, writtenPos, &getWrittenCount);
+        	if(KEY_DOWN(VK_LBUTTON)){ 
 				if(cur==1)cur=0;
-				if(cur==0)cur=1;
+				else if(cur==0)cur=1;
 				//HANDLE hStdoutw;hStdoutw=GetStdHandle(STD_OUTPUT_HANDLE);clearp(hStdoutw);
 				//break;
 			}
@@ -72,11 +72,9 @@ int Dbh::contact_button(int cx,int sx,int fy){
 			HANDLE outputHandle=GetStdHandle(STD_OUTPUT_HANDLE);
 			DWORD getWrittenCount = 0;
 			COORD writtenPos={cx,fy};
-			FillConsoleOutputAttribute(outputHandle, 0x0B, sx-cx, writtenPos, &getWrittenCount);
+			FillConsoleOutputAttribute(outputHandle, wttd, sx-cx, writtenPos, &getWrittenCount);
 		} 
-	} 
-	return false;
-}
+	} }
 int Dbh::text_box(int cx,int fy,int txtin,int length){
 	if (hOut == INVALID_HANDLE_VALUE)return GetLastError();
     DWORD dwMode = 0;
@@ -89,6 +87,50 @@ int Dbh::text_box(int cx,int fy,int txtin,int length){
 	printf("\x1b[%hd;%hdH", y + 1, x);
 	for(int i=1;i<=length-1-floor(log10(txtin));i++)cout<<" ";
 	cout<<txtin;
+}
+int Dbh::write_box(int cx,int fy,string txton,int length,WORD wttu,WORD wttd){
+	if (hOut == INVALID_HANDLE_VALUE)return GetLastError();
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode))return GetLastError();
+    dwMode |= 0x0004;
+    if (!SetConsoleMode(hOut, dwMode))return GetLastError();
+	short x =cx,y=fy;
+	printf("\x1b[%hd;%hdH", y + 1, x+1);
+	for(int i=1;i<=length;i++)cout<<"¨€";
+	printf("\x1b[%hd;%hdH", y + 1, x+1);
+	const char *der=txton.substr(0, length-2).c_str();
+	const char *derd=txton.c_str();
+	if(txton.size()>length-1){
+		printf("%s...",der);
+		Dbh dbh;
+		#pragma omp parallel for
+		for(int i=1;i<=2;i++){
+			if(i==1)dbh.contact_button(cx,cx+length+2,fy,wttu,wttd);
+			else{
+				int old=dbh.cur;
+				while(1){
+					Sleep(2);
+					if(dbh.cur!=old){
+						if(dbh.cur==1){
+							printf("\x1b[%hd;%hdH", y + 1, x+1);printf("%s",derd);
+						}
+						else {
+							const char *dert=txton.substr(0, length-2).c_str();
+							printf("\x1b[%hd;%hdH", y + 1, x+1);printf("%s...",dert);
+							//printf("\x1b[%hd;%hdH", y + 1, x+length);
+							for(int i=1;i<=txton.size()-length+2;i++)cout<<" "; 
+						}
+						old=dbh.cur;
+					}
+					
+				}
+			}
+		}
+	}
+	else {
+		for(int i=1;i<=length-txton.size();i++)cout<<' ';
+		printf("%s",derd);
+	}
 }
 int Dbh::color_box(int cx,int fy,int r,int g,int b){
 	if (hOut == INVALID_HANDLE_VALUE)return GetLastError();
@@ -176,10 +218,7 @@ int Dbh::adjustment_button(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_o
 				cur=input_box(cx+2,fy,width);text_box(cx+2,fy,cur,width);
 			}
 		}
-	} 
-	return 0;
-}
-//int sd;
+	} }
 int Dbh::slider_bar(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_ox,int g_ox,int b_ox){
     if (hOut == INVALID_HANDLE_VALUE)return GetLastError();
     DWORD dwMode = 0;
@@ -228,6 +267,5 @@ int Dbh::slider_bar(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_ox,int g
 				text_box(cx+12,fy,cur,5);
 			}
 		}
-	} 
-	return 0;
-}
+	} }
+
