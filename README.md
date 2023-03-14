@@ -45,5 +45,5 @@ add the heading as:
 #include<conio.h>
 #include<cstdio>
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
-```c++
+``` c++
 And use openMP to combine controls as
