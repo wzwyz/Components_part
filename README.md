@@ -11,7 +11,7 @@
 It’s written on Devcpp 4.9.2 and can supports all versions below 5.1.1.
 ## **Here are the available functions in the lib:**
 The function supported always formed by subjects below:
-```
+```c++
 Dbh::describe_function(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_ox,int g_ox,int b_ox,char lsig,char rsig,int width)
 ```
 
@@ -23,7 +23,7 @@ Dbh::describe_function(int cx,int fy,int difnumb,WORD wttu,WORD wttd,int r_ox,in
 - `width` represents to the width of the controls.`cx` and `fy` represent to the position of the controls on the consoles;
 
 ## **And the original function is listed as follow:**
-```
+```c++
 int adjustment_button(int cx,int fy,int difnumb,WORD wttu=0xB0,WORD wttd=0x0B,int r_ox=173,int g_ox=17,int b_ox=255,char lsig='<',char rsig='>',int width=4);
 int slider_bar(int cx,int fy,int difnumb,WORD wttu=0xB0,WORD wttd=0x0B,int r_ox=145,int g_ox=215,int b_ox=37);
 int input_box(int cx,int fy,int areat,int r_ox=173,int g_ox=202,int b_ox=255);
@@ -45,5 +45,5 @@ add the heading as:
 #include<conio.h>
 #include<cstdio>
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
-``` c++
+```
 And use openMP to combine controls as
