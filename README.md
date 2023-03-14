@@ -40,10 +40,10 @@ void clearp(HANDLE hConsole=GetStdHandle(STD_INPUT_HANDLE));
 
 ## **How to add it to GCC compiler linker：**
 add the heading as:
-```
+```c++
 #include "Dbh.h"
 #include<conio.h>
 #include<cstdio>
 #define KEY_DOWN(VK_NONAME) ((GetAsyncKeyState(VK_NONAME) & 0x8000) ? 1:0)
-```
+```c++
 And use openMP to combine controls as
