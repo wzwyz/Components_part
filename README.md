@@ -6,6 +6,7 @@
 
 # Components_part
 ![c++](https://github.com/wzwyz/Components_part/actions/workflows/c-cpp.yml/badge.svg)
+![c++](https://github.com/wzwyz/Components_part/actions/workflows/cmake.yml/badge.svg)
 ### Easier graphic operating controls for GCC 
 It’s written on Devcpp 4.9.2 and can supports all versions below 5.1.1.
 ## **Here are the available functions in the lib:**
